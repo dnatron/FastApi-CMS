@@ -6,14 +6,26 @@ from sqlmodel import Session, select
 from datetime import datetime
 
 from database.database import init_db, get_session
-from routers import user
-from models.user import User, UserRole
+from routers import user, admin
 from models.category import PageCategory
 from models.page import Page
-from security.utility_auth import get_password_hash
+from db_init import create_admin_if_not_exists, create_default_categories_if_not_exist, create_sample_pages_if_not_exist, create_sample_user
 
 # Vytvoření FastAPI aplikace
 app = FastAPI(title="FastAPI CMS", description="Jednoduchý CMS systém postavený na FastAPI a SQLModel")
+
+# Inicializace aplikace
+@app.on_event("startup")
+def on_startup():
+    # Inicializace databáze
+    init_db()
+    
+    # -------Sample data-------
+    db = next(get_session())
+    create_admin_if_not_exists(db)
+    create_sample_user(db)
+    create_default_categories_if_not_exist(db)
+    create_sample_pages_if_not_exist(db)
 
 # Přidání CORS middleware
 app.add_middleware(
@@ -32,68 +44,12 @@ templates = Jinja2Templates(directory="templates")
 
 # Přidání routerů
 app.include_router(user.router)
-
-
-# Vytvoření administrátora při prvním spuštění
-def create_admin_if_not_exists(db: Session):
-    admin = db.query(User).filter(User.username == "admin").first()
-    if not admin:
-        admin_user = User(
-            username="admin",
-            email="admin@example.com",
-            hashed_password=get_password_hash("admin"),  # V produkci použít silné heslo
-            first_name="Admin",
-            last_name="User",
-            role=UserRole.ADMIN,
-            is_active=True,
-        )
-        db.add(admin_user)
-        db.commit()
-        print("Admin uživatel vytvořen")
+app.include_router(admin.router)
 
 
 # Funkce pro získání kategorií stránek
 def get_page_categories(db: Session):
     return db.exec(select(PageCategory).where(PageCategory.is_active).order_by(PageCategory.name)).all()
-
-# Funkce pro vytvoření výchozích kategorií
-def create_default_categories_if_not_exist(db: Session):
-    # Kontrola, zda již existují nějaké kategorie
-    categories_count = db.exec(select(PageCategory)).all()
-    if not categories_count:
-        # Vytvoření výchozích kategorií
-        default_categories = [
-            PageCategory(
-                name="Hlavní stránky",
-                description="Hlavní stránky webu",
-                url_friendly="hlavni-stranky",
-                is_active=True
-            ),
-            PageCategory(
-                name="O nás",
-                description="Informace o nás",
-                url_friendly="o-nas",
-                is_active=True
-            ),
-            PageCategory(
-                name="Služby",
-                description="Naše služby",
-                url_friendly="sluzby",
-                is_active=True
-            ),
-            PageCategory(
-                name="Kontakt",
-                description="Kontaktní informace",
-                url_friendly="kontakt",
-                is_active=True
-            ),
-        ]
-        
-        for category in default_categories:
-            db.add(category)
-        
-        db.commit()
-        print("Výchozí kategorie vytvořeny")
 
 # Hlavní stránka
 @app.get("/", tags=["pages"])
@@ -137,18 +93,6 @@ async def category_pages(request: Request, url_friendly: str, db: Session = Depe
             "current_year": current_year
         }
     )
-
-
-# Inicializace aplikace
-@app.on_event("startup")
-def on_startup():
-    # Inicializace databáze
-    init_db()
-    
-    # Vytvoření administrátora a výchozích kategorií
-    db = next(get_session())
-    create_admin_if_not_exists(db)
-    create_default_categories_if_not_exist(db)
 
 
 # Spuštění aplikace
