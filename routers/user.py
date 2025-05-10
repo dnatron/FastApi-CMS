@@ -10,10 +10,11 @@ from sqlmodel import Session, select
 from database.database import get_session
 from models.user import User, UserRole
 from security.utility_auth import (
-    authenticate_user,
-    create_access_token,
+    get_current_user,
     get_current_active_user,
     get_current_admin_user,
+    authenticate_user,
+    create_access_token,
     get_password_hash,
     ACCESS_TOKEN_EXPIRE_MINUTES,
 )
@@ -205,11 +206,23 @@ async def register(
 
 
 @router.get("/dashboard", response_class=HTMLResponse)
-async def dashboard(request: Request, current_user: User = Depends(get_current_active_user)):
-    return templates.TemplateResponse(
-        "user/dashboard.html",
-        {"request": request, "user": current_user},
-    )
+async def dashboard(request: Request, db: Session = Depends(get_session)):
+    # Získání aktuálního uživatele
+    try:
+        # Použijeme get_current_user přímo, protože potřebujeme předat request pro přístup ke cookies
+        current_user = await get_current_user(request=request, db=db)
+        
+        # Ověříme, že uživatel je aktivní
+        if not current_user.is_active:
+            raise HTTPException(status_code=400, detail="Inactive user")
+            
+        return templates.TemplateResponse(
+            "user/dashboard.html",
+            {"request": request, "user": current_user},
+        )
+    except HTTPException:
+        # Přesměrování na přihlašovací stránku v případě chyby autentizace
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
 
 
 @router.get("/logout")

@@ -1,12 +1,13 @@
+from datetime import datetime
+
 from fastapi import FastAPI, Request, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select
-from datetime import datetime
 
 from database.database import init_db, get_session
-from routers import user
+from routers import user, admin
 from models.user import User
 from models.page import Page
 from models.category import PageCategory
@@ -36,6 +37,7 @@ templates = Jinja2Templates(directory="templates")
 
 # Připojení routerů
 app.include_router(user.router)
+app.include_router(admin.router)
 
 
 # Funkce pro vytvoření administrátora, pokud neexistuje
