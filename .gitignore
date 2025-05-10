@@ -30,3 +30,4 @@ build/
 # OS specifické soubory
 .DS_Store
 Thumbs.db
+database/db.db
