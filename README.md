@@ -67,7 +67,7 @@ Náš CMS využívá HTMX místo tradičních JavaScript frameworků jako React,
 
 4. Spusťte aplikaci:
    ```bash
-   python main.py
+   uvicorn app:app --reload
    ```
 
 5. Otevřete prohlížeč a přejděte na adresu:
