@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FastAPI CMS{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Vlastní CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Hlavička -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="/">FastAPI CMS</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Hlavní stránka</a>
+                        </li>
+                        
+                        <!-- Kategorie stránek v menu -->
+                        {% if categories %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Kategorie
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                                {% for category in categories %}
+                                <li><a class="dropdown-item" href="/category/{{ category.url_friendly }}">{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        {% endif %}
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Služby</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Produkty</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">O nás</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Kontakt</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        {% if user and user.is_active %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                                {% if user.role == 'admin' %}
+                                <li><a class="dropdown-item" href="/admin">Administrace</a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">Odhlásit se</a></li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Přihlášení</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">Registrace</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hlavní obsah -->
+    <main class="container py-4">
+        {% block content %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="jumbotron">
+                    <h1 class="display-4">Vítejte v FastAPI CMS!</h1>
+                    <p class="lead">Jednoduchý, snadno ovladatelný a přesto moderní CMS systém.</p>
+                    <hr class="my-4">
+                    <p>Tento systém je postaven na technologiích FastAPI a SQLModel, což zaručuje rychlost, bezpečnost a snadnou rozšiřitelnost.</p>
+                    <a class="btn btn-primary btn-lg" href="/register" role="button">Zaregistrujte se</a>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </main>
+
+    <!-- Patička -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>O nás</h5>
+                    <p>FastAPI CMS je moderní systém pro správu obsahu, který nabízí jednoduchost a zároveň pokročilé funkce.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Odkazy</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Podmínky užití</a></li>
+                        <li><a href="#" class="text-white">Ochrana osobních údajů</a></li>
+                        <li><a href="/admin" class="text-white">Administrační panel</a></li>
+                        <li><a href="#" class="text-white">Cookie</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Sledujte nás</h5>
+                    <div class="social-icons">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="mt-3">
+                        <h5>Newsletter</h5>
+                        <form>
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="Váš e-mail">
+                                <button class="btn btn-primary" type="submit">Odebírat</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 text-center">
+                    <p class="mb-0">&copy; {{ current_year }} FastAPI CMS. Všechna práva vyhrazena.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Vlastní JS -->
+    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

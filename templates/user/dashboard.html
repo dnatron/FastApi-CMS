@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - FastAPI CMS{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Uživatelský profil</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-user-circle fa-5x text-primary"></i>
+                </div>
+                <h5>{{ user.username }}</h5>
+                <p class="text-muted">{{ user.email }}</p>
+                <p>
+                    <span class="badge bg-primary">{{ user.role }}</span>
+                    {% if user.is_active %}
+                    <span class="badge bg-success">Aktivní</span>
+                    {% else %}
+                    <span class="badge bg-danger">Neaktivní</span>
+                    {% endif %}
+                </p>
+                <div class="d-grid gap-2">
+                    <a href="#" class="btn btn-outline-primary btn-sm">Upravit profil</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group mb-4">
+            <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
+            <a href="#" class="list-group-item list-group-item-action">Můj profil</a>
+            <a href="#" class="list-group-item list-group-item-action">Moje příspěvky</a>
+            <a href="#" class="list-group-item list-group-item-action">Moje komentáře</a>
+            {% if user.role == 'admin' or user.role == 'editor' %}
+            <a href="#" class="list-group-item list-group-item-action">Správa obsahu</a>
+            {% endif %}
+            {% if user.role == 'admin' %}
+            <a href="#" class="list-group-item list-group-item-action">Správa uživatelů</a>
+            <a href="#" class="list-group-item list-group-item-action">Nastavení webu</a>
+            {% endif %}
+            <a href="/logout" class="list-group-item list-group-item-action text-danger">Odhlásit se</a>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Dashboard</h5>
+                <span>Vítejte zpět, {{ user.first_name or user.username }}!</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Moje příspěvky</h6>
+                                        <h2 class="mb-0">0</h2>
+                                    </div>
+                                    <i class="fas fa-file-alt fa-3x opacity-50"></i>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-primary-dark py-2">
+                                <a href="#" class="text-white text-decoration-none small">Zobrazit vše <i class="fas fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Moje komentáře</h6>
+                                        <h2 class="mb-0">0</h2>
+                                    </div>
+                                    <i class="fas fa-comments fa-3x opacity-50"></i>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-success-dark py-2">
+                                <a href="#" class="text-white text-decoration-none small">Zobrazit vše <i class="fas fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Poslední přihlášení</h6>
+                                        <p class="mb-0">{{ user.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                                    </div>
+                                    <i class="fas fa-clock fa-3x opacity-50"></i>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-info-dark py-2">
+                                <a href="#" class="text-white text-decoration-none small">Zobrazit historii <i class="fas fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Rychlé akce</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <a href="#" class="btn btn-outline-primary d-block">
+                                    <i class="fas fa-edit me-2"></i> Vytvořit nový příspěvek
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="#" class="btn btn-outline-primary d-block">
+                                    <i class="fas fa-user-edit me-2"></i> Upravit profil
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="#" class="btn btn-outline-primary d-block">
+                                    <i class="fas fa-lock me-2"></i> Změnit heslo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Poslední aktivita</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> Zatím nemáte žádnou aktivitu.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-primary-dark {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    .bg-success-dark {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    .bg-info-dark {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}

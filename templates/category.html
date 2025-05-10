@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category.name if category else "Kategorie nenalezena" }} | FastAPI CMS{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    {% if category %}
+    <h1 class="mb-4">{{ category.name }}</h1>
+    
+    {% if category.description %}
+    <div class="mb-4">
+        {{ category.description }}
+    </div>
+    {% endif %}
+    
+    {% if pages %}
+    <div class="row">
+        {% for page in pages %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ page.title }}</h5>
+                    <p class="card-text">{{ page.meta_description or page.content[:150] ~ "..." }}</p>
+                    <a href="/page/{{ page.url_friendly }}" class="btn btn-primary">Číst více</a>
+                </div>
+                <div class="card-footer text-muted">
+                    Vytvořeno: {{ page.created_at.strftime('%d.%m.%Y') }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        V této kategorii zatím nejsou žádné stránky.
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <div class="alert alert-warning">
+        Požadovaná kategorie nebyla nalezena.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
