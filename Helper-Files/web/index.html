@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI CMS - Moderní systém pro správu obsahu</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, var(--primary-color), #2980b9);
+        }
+        
+        .hero-section {
+            padding: 120px 0;
+            color: white;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -15px;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        .tech-icon {
+            font-size: 3rem;
+            margin: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .footer {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+        }
+        
+        .testimonial-card {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-rocket me-2"></i>FastAPI CMS
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Funkce</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tech">Technologie</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#htmx">HTMX vs React</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#installation">Instalace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#roadmap">Roadmapa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light ms-2" href="https://github.com/dnatron/FastApi-CMS" target="_blank">
+                            <i class="fab fa-github me-2"></i>GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section bg-gradient-primary text-center">
+        <div class="container">
+            <h1 class="display-3 fw-bold mb-4">FastAPI CMS</h1>
+            <p class="lead mb-5">Moderní, rychlý a flexibilní systém pro správu obsahu<br>postavený na FastAPI, SQLModel a HTMX</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="https://github.com/dnatron/FastApi-CMS" class="btn btn-light btn-lg px-4">
+                    <i class="fab fa-github me-2"></i>GitHub
+                </a>
+                <a href="#features" class="btn btn-outline-light btn-lg px-4">
+                    Zjistit více
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="py-5" id="features">
+        <div class="container">
+            <h2 class="text-center section-title">Klíčové funkce</h2>
+            <div class="row g-4 py-4">
+                <div class="col-md-4">
+                    <div class="card h-100 p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3>Vysoký výkon</h3>
+                        <p>Asynchronní zpracování požadavků pro maximální rychlost a efektivitu.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3>Flexibilní obsah</h3>
+                        <p>Podpora stránek, článků a modulárních bloků pro maximální přizpůsobitelnost.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Bezpečnost</h3>
+                        <p>JWT autentizace a role-based přístupový systém pro maximální zabezpečení.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <h3>Kategorizace obsahu</h3>
+                        <p>Oddělené kategorie pro stránky, články a bloky s možností vnorených kategorií.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Uživatelské role</h3>
+                        <p>Podpora pro administrátory, editory a běžné uživatele s různými úrovněmi oprávnění.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>SEO optimalizace</h3>
+                        <p>Podpora meta tagů, URL friendly adres a klíčových slov pro lepší vyhledávání.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technologies Section -->
+    <section class="py-5 bg-light" id="tech">
+        <div class="container">
+            <h2 class="text-center section-title">Technologie</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="p-4">
+                        <h3 class="mb-4">Moderní stack pro moderní aplikace</h3>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent"><i class="fas fa-server text-primary me-2"></i><strong>Backend:</strong> FastAPI, SQLModel, Pydantic</li>
+                            <li class="list-group-item bg-transparent"><i class="fas fa-database text-primary me-2"></i><strong>Databáze:</strong> SQLite (s možností přechodu na PostgreSQL nebo MySQL)</li>
+                            <li class="list-group-item bg-transparent"><i class="fas fa-lock text-primary me-2"></i><strong>Autentizace:</strong> JWT (JSON Web Tokens)</li>
+                            <li class="list-group-item bg-transparent"><i class="fas fa-paint-brush text-primary me-2"></i><strong>Frontend:</strong> Bootstrap 5, Jinja2, HTMX</li>
+                            <li class="list-group-item bg-transparent"><i class="fas fa-cloud text-primary me-2"></i><strong>Deployment:</strong> Uvicorn</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="d-flex flex-wrap justify-content-center">
+                        <div class="m-3 text-center">
+                            <i class="fab fa-python tech-icon"></i>
+                            <p>Python</p>
+                        </div>
+                        <div class="m-3 text-center">
+                            <i class="fas fa-bolt tech-icon"></i>
+                            <p>FastAPI</p>
+                        </div>
+                        <div class="m-3 text-center">
+                            <i class="fas fa-database tech-icon"></i>
+                            <p>SQLModel</p>
+                        </div>
+                        <div class="m-3 text-center">
+                            <i class="fab fa-bootstrap tech-icon"></i>
+                            <p>Bootstrap</p>
+                        </div>
+                        <div class="m-3 text-center">
+                            <i class="fas fa-code tech-icon"></i>
+                            <p>HTMX</p>
+                        </div>
+                        <div class="m-3 text-center">
+                            <i class="fas fa-file-code tech-icon"></i>
+                            <p>Jinja2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HTMX vs React Section -->
+    <section class="py-5" id="htmx">
+        <div class="container">
+            <h2 class="text-center section-title">Proč HTMX místo Reactu?</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-2">
+                    <img src="https://htmx.org/img/htmx-logo.png" alt="HTMX Logo" class="img-fluid p-5">
+                </div>
+                <div class="col-lg-6 order-lg-1">
+                    <div class="card p-4 mb-4">
+                        <h4><i class="fas fa-feather-alt text-primary me-2"></i>Jednodušší architektura</h4>
+                        <p>HTMX umožňuje vytvářet dynamické aplikace bez nutnosti psát komplexní JavaScript kód nebo používat složité build systémy.</p>
+                    </div>
+                    <div class="card p-4 mb-4">
+                        <h4><i class="fas fa-tachometer-alt text-primary me-2"></i>Menší velikost</h4>
+                        <p>HTMX je pouze ~14kB (gzipped), zatímco React s ReactDOM je ~40kB, což vede k rychlejšímu načítání stránek.</p>
+                    </div>
+                    <div class="card p-4 mb-4">
+                        <h4><i class="fas fa-server text-primary me-2"></i>Serverový rendering</h4>
+                        <p>Veškeré vykreslování probíhá na serveru, což zjednodušuje SEO a zlepšuje výkon na méně výkonných zařízeních.</p>
+                    </div>
+                    <div class="card p-4">
+                        <h4><i class="fas fa-code text-primary me-2"></i>Méně JavaScript kódu</h4>
+                        <p>Méně kódu znamená méně chyb, lepší udržovatelnost a snazší onboarding nových vývojářů.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section class="py-5 bg-light" id="installation">
+        <div class="container">
+            <h2 class="text-center section-title">Instalace a použití</h2>
+            <div class="row">
+                <div class="col-lg-6">
+                    <h3 class="mb-4">Postup instalace</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h5>1. Klonujte repozitář</h5>
+                            <div class="code-block">
+                                <code>git clone https://github.com/dnatron/FastApi-CMS.git<br>cd FastApi-CMS</code>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <h5>2. Vytvořte virtuální prostředí</h5>
+                            <div class="code-block">
+                                <code>python -m venv venv<br>source venv/bin/activate  # Na Windows: venv\Scripts\activate</code>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <h5>3. Nainstalujte závislosti</h5>
+                            <div class="code-block">
+                                <code>pip install -r requirements.txt</code>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <h5>4. Spusťte aplikaci</h5>
+                            <div class="code-block">
+                                <code>python main.py</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="mb-4">Počáteční nastavení</h3>
+                    <div class="card p-4 mb-4">
+                        <h5><i class="fas fa-user-shield text-primary me-2"></i>Přihlášení administrátora</h5>
+                        <p>Po prvním spuštění se automaticky vytvoří administrátorský účet:</p>
+                        <ul>
+                            <li><strong>Uživatelské jméno:</strong> admin</li>
+                            <li><strong>Heslo:</strong> admin</li>
+                        </ul>
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Po prvním přihlášení změňte heslo administrátora!
+                        </div>
+                    </div>
+                    <div class="card p-4">
+                        <h5><i class="fas fa-cogs text-primary me-2"></i>Správa obsahu</h5>
+                        <p>V administračním rozhraní můžete:</p>
+                        <ul>
+                            <li>Vytvářet a upravovat stránky</li>
+                            <li>Publikovat články s podporou kategorií a tagů</li>
+                            <li>Vytvářet modulární bloky obsahu</li>
+                            <li>Organizovat obsah do kategorií</li>
+                            <li>Spravovat uživatelské účty a role</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="py-5" id="roadmap">
+        <div class="container">
+            <h2 class="text-center section-title">Roadmapa</h2>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" disabled>
+                            </div>
+                            <h5 class="mb-0 ms-2">Administrační rozhraní pro správu obsahu</h5>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" disabled>
+                            </div>
+                            <h5 class="mb-0 ms-2">Editor WYSIWYG pro pohodlnější úpravy</h5>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" disabled>
+                            </div>
+                            <h5 class="mb-0 ms-2">Systém pluginů pro rozšíření funkcionality</h5>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" disabled>
+                            </div>
+                            <h5 class="mb-0 ms-2">Podpora více jazyků</h5>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" disabled>
+                            </div>
+                            <h5 class="mb-0 ms-2">Integrace s CDN pro správu médií</h5>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" disabled>
+                            </div>
+                            <h5 class="mb-0 ms-2">API dokumentace pomocí Swagger UI</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-5 bg-gradient-primary text-white text-center">
+        <div class="container">
+            <h2 class="mb-4">Začněte s FastAPI CMS ještě dnes!</h2>
+            <p class="lead mb-4">Otevřený zdrojový kód, moderní technologie a jednoduché použití</p>
+            <a href="https://github.com/dnatron/FastApi-CMS" class="btn btn-light btn-lg px-4" target="_blank">
+                <i class="fab fa-github me-2"></i>Stáhnout z GitHubu
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5 class="text-uppercase mb-4"><i class="fas fa-rocket me-2"></i>FastAPI CMS</h5>
+                    <p>Moderní, rychlý a flexibilní systém pro správu obsahu postavený na FastAPI a SQLModel.</p>
+                    <div class="d-flex">
+                        <a href="https://github.com/dnatron/FastApi-CMS" class="me-3 text-white">
+                            <i class="fab fa-github fa-2x"></i>
+                        </a>
+                        <a href="https://www.dnatron.com" class="text-white">
+                            <i class="fas fa-globe fa-2x"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5 class="text-uppercase mb-4">Odkazy</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#features" class="text-white">Funkce</a></li>
+                        <li class="mb-2"><a href="#tech" class="text-white">Technologie</a></li>
+                        <li class="mb-2"><a href="#htmx" class="text-white">HTMX vs React</a></li>
+                        <li class="mb-2"><a href="#installation" class="text-white">Instalace</a></li>
+                        <li><a href="#roadmap" class="text-white">Roadmapa</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="text-uppercase mb-4">Kontakt</h5>
+                    <p><i class="fas fa-globe me-2"></i>www.dnatron.com</p>
+                    <p><i class="fab fa-github me-2"></i>github.com/dnatron</p>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 FastAPI CMS. Všechna práva vyhrazena.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
