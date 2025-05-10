@@ -1,2 +1,32 @@
+# Virtuální prostředí
 /venv
+
+# Databáze
 database/db.db
+
+# Python cache soubory
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Distribuce / balíčky
+dist/
+build/
+*.egg-info/
+
+# Logy
+*.log
+
+# Lokální konfigurační soubory
+.env
+.env.local
+
+# IDE soubory
+.idea/
+.vscode/
+*.sublime-*
+
+# OS specifické soubory
+.DS_Store
+Thumbs.db
