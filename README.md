@@ -133,7 +133,8 @@ Distribuováno pod licencí MIT. Viz `LICENSE` soubor pro více informací.
 
 ## Kontakt a informace
 
-Denveloper: https://www.dnatron.com
-CMS website: https://www.dnatron.com/fastapi-cms
+Denveloper: [https://www.dnatron.com](https://www.dnatron.com)
+
+CMS website: [https://www.dnatron.com/fastapi-cms](https://www.dnatron.com/fastapi-cms)
 
 Odkaz na projekt: [https://github.com/dnatron/FastApi-CMS](https://github.com/dnatron/FastApi-CMS)
