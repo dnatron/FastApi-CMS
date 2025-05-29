@@ -4,6 +4,9 @@
 # Databáze
 database/db.db
 
+# pomocné soubory
+Helper-Files
+
 # Python cache soubory
 __pycache__/
 *.py[cod]
